@@ -497,7 +497,7 @@ function fairy() {
       applyPose(rig, p, npc, dt);
       if (npc.action?.name === "special") rig.bodyPivot.rotation.x = lean;
       wings.forEach(({ pivot, s }) => (pivot.rotation.y = s * (0.3 + Math.sin(t * flap) * 0.5)));
-      rig.root.position.y = 1.3 + Math.sin(t * 2 + npc.seed) * 0.18;
+      rig.root.position.y = (npc.hoverY ?? 1.3) + Math.sin(t * 2 + npc.seed) * 0.15;
       star.rotation.y = t * 3;
     },
   };

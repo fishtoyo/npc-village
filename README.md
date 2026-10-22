@@ -17,13 +17,19 @@
 | 史萊姆 Puru | 大跳躍 | 擠壓伸展（squash & stretch） |
 | 小精靈 Tink | 空翻 | 飛行路徑、翅膀拍動、半透明材質 |
 
-每個角色都會自己發呆、散步、東張西望、眨眼，偶爾做特殊動作，並避開營火、帳篷、樹和彼此。點角色會打招呼並說一句英文台詞。
+每個角色一張卡片，在自己的小舞台裡原地動作：發呆、東張西望、眨眼、原地踏步（順便轉一圈展示側面與背面），偶爾做特殊動作。
 
 ## 操作
 
-- 拖曳旋轉、滾輪縮放
-- 點角色（或左側名冊）：鏡頭飛到角色前方，打開角色資訊
-- **全體跳舞**、**切換夜晚**、**名牌**、**技術說明**
+- 點角色或「說話」：打招呼並說一句英文台詞
+- 特殊動作按鈕：揮劍、施法、射箭、叫賣、大跳躍、空翻
+- 上方按鈕：**全體跳舞**、**切換夜晚**、**技術說明**
+
+## 運作方式
+
+整頁只有**一個** WebGL 畫布，固定蓋在畫面上（不攔截滑鼠）。每一幀依照每張卡片舞台區的位置，用 `setViewport` + `setScissor` 把對應的小場景畫進去；捲到畫面外的卡片不更新也不繪製。這樣 6 個 3D 場景只需要一個 WebGL 環境，效能最好。
+
+> 注意：卡片不能加 `transform`、`opacity`、`z-index` 等會建立堆疊層的樣式，否則對話框會被 3D 畫布蓋住。
 
 ## 本機預覽
 
@@ -38,10 +44,10 @@ php -S localhost:8000      # 或 npx serve .
 ```
 index.html                 頁面與介面
 assets/css/style.css       WordHero 風格的面板與按鈕
-assets/js/main.js          場景、鏡頭、點選、介面
+assets/js/main.js          卡片、單一畫布多舞台繪製、按鈕
 assets/js/characters.js    6 個角色的造型與動作（新增角色從這裡開始）
-assets/js/npc.js           NPC 行為狀態機（發呆／散步／特殊動作／打招呼／跳舞）
-assets/js/world.js         營地場景與日夜光線
+assets/js/actor.js         角色行為（發呆／踏步轉圈／特殊動作／打招呼／跳舞）
+assets/js/stage.js         每張卡片的小舞台：草地圓台、燈光、專屬道具
 assets/js/toon.js          卡通著色與描邊
 assets/js/particles.js     粒子系統
 assets/vendor/three/       Three.js r170（MIT License）
@@ -51,4 +57,4 @@ assets/vendor/three/       Three.js r170（MIT License）
 
 1. 在 `assets/js/characters.js` 寫一個建立函式：用 `humanoid({ body, legs, shoes })` 做出 Q 版身體，再加上帽子、道具，`animate()` 裡呼叫 `pose()` 和 `applyPose()` 就有走路、眨眼、跳舞。
 2. 在同一檔案的 `CHARACTERS` 陣列加一筆資料（名字、顏色、速度、台詞、特殊動作名稱）。
-3. 在 `assets/js/main.js` 的 `TAG_Y` 設定名牌高度。
+3. 想要專屬道具，在 `assets/js/stage.js` 的 `PROPS` 加一個同 id 的函式。

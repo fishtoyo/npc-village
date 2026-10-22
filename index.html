@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>NPC 小村 NPC VILLAGE</title>
-    <meta name="description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：勇者、魔法師、弓箭手、商人、史萊姆、小精靈，會自己散步、眨眼、做特殊動作。" />
+    <meta name="description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：勇者、魔法師、弓箭手、商人、史萊姆、小精靈，每個角色在自己的格子裡發呆、踏步、眨眼、做特殊動作。" />
     <meta name="theme-color" content="#3d6d8c" />
     <link rel="canonical" href="https://fishtoyo.github.io/npc-village/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="NPC 小村 NPC VILLAGE" />
-    <meta property="og:description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：會散步、眨眼、施法、跳舞，還會說英文單字。" />
+    <meta property="og:description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：每個角色在自己的格子裡踏步、眨眼、施法、跳舞，還會說英文單字。" />
     <meta property="og:url" content="https://fishtoyo.github.io/npc-village/" />
     <meta property="og:image" content="https://fishtoyo.github.io/npc-village/assets/og.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -31,72 +31,40 @@
     <script type="module" src="./assets/js/main.js"></script>
   </head>
   <body>
-    <div id="sky-night" aria-hidden="true"></div>
-    <main id="stage" aria-label="3D 營地場景，可拖曳旋轉、點擊角色"></main>
-
-    <header class="title-card panel">
-      <p class="kicker">NPC VILLAGE</p>
-      <h1>NPC 小村</h1>
-      <p class="sub">Three.js 角色展示・WordHero 風格</p>
+    <header class="top">
+      <div class="title-card panel">
+        <p class="kicker">NPC VILLAGE</p>
+        <h1>NPC 小村</h1>
+        <p class="sub">Three.js 角色展示・WordHero 風格</p>
+      </div>
+      <nav class="controls" aria-label="控制">
+        <button type="button" class="btn orange" id="btn-dance" aria-pressed="false">全體跳舞</button>
+        <button type="button" class="btn gold" id="btn-night" aria-pressed="false">切換夜晚</button>
+        <button type="button" class="btn tan" id="btn-tech">技術說明</button>
+      </nav>
     </header>
 
-    <section class="roster panel" aria-label="村民名冊">
-      <h2 class="panel-head">村民名冊</h2>
-      <ul id="roster-list"></ul>
-    </section>
+    <main id="grid" class="grid" aria-label="角色列表"></main>
 
-    <aside id="info" class="info panel" hidden aria-live="polite">
-      <div class="panel-head">
-        角色資訊
-        <button type="button" class="close" id="info-close" aria-label="關閉">✕</button>
-      </div>
-      <div class="info-body">
-        <div class="info-top">
-          <span class="avatar" id="info-avatar"></span>
-          <div>
-            <p class="info-role" id="info-role"></p>
-            <h2 id="info-name"></h2>
-          </div>
-        </div>
-        <p class="info-desc" id="info-desc"></p>
-        <div class="word-card">
-          <p class="word-en" id="info-en"></p>
-          <p class="word-zh" id="info-zh"></p>
-        </div>
-        <p class="info-tech"><b>用到的技術</b><span id="info-tech"></span></p>
-        <div class="btn-row">
-          <button type="button" class="btn orange" id="btn-talk">說話</button>
-          <button type="button" class="btn gold" id="btn-special">特殊動作</button>
-          <button type="button" class="btn teal" id="btn-back">回到全景</button>
-        </div>
-      </div>
-    </aside>
-
-    <nav class="controls" aria-label="控制">
-      <button type="button" class="btn orange" id="btn-dance" aria-pressed="false">全體跳舞</button>
-      <button type="button" class="btn gold" id="btn-night" aria-pressed="false">切換夜晚</button>
-      <button type="button" class="btn teal" id="btn-tags" aria-pressed="true">名牌</button>
-      <button type="button" class="btn tan" id="btn-tech">技術說明</button>
-    </nav>
+    <footer class="foot">每個角色都由程式即時組成，沒有載入任何 3D 模型或圖片。點角色會說一句英文。</footer>
 
     <div id="tech" class="tech-wrap" hidden>
-      <section class="tech panel" role="dialog" aria-modal="true" aria-labelledby="tech-title">
+      <section class="tech-panel panel" role="dialog" aria-modal="true" aria-labelledby="tech-title">
         <div class="panel-head">
           <span id="tech-title">Three.js 在這裡做了什麼？</span>
           <button type="button" class="close" id="tech-close" aria-label="關閉">✕</button>
         </div>
         <div class="tech-body">
-          <p>所有角色與場景都是用程式即時組出來的，沒有載入任何 3D 模型檔或圖片。</p>
+          <p>所有角色都是用程式即時組出來的（球、膠囊、圓錐、圓柱），沒有載入任何 3D 模型檔或圖片。</p>
           <ul>
+            <li><b>一個畫布、多個舞台</b>：整頁只有一個 WebGL 畫布，用 scissor 把 6 個小場景分別畫進每張卡片的位置；捲到畫面外的卡片不會繪製。</li>
             <li><b>卡通著色（Toon Shading）</b>：<code>MeshToonMaterial</code> 搭配三階漸層貼圖，光影呈現色塊感。</li>
             <li><b>描邊</b>：每個零件複製一份放大、只畫背面的網格（inverted hull），做出卡通黑邊。</li>
-            <li><b>Q 版骨架</b>：身體、頭、手、腳各有關節（Group pivot），用程式計算旋轉角度做走路、揮手、跳舞。</li>
-            <li><b>NPC 行為</b>：每個角色有自己的狀態機：發呆 → 散步 → 特殊動作，還會眨眼、東張西望、避開障礙物與彼此。</li>
+            <li><b>Q 版骨架</b>：身體、頭、手、腳各有關節，用程式計算旋轉角度做踏步、揮手、跳舞。</li>
+            <li><b>角色行為</b>：發呆 → 原地踏步（順便轉一圈展示側面與背面）→ 偶爾做特殊動作，還會眨眼、東張西望。</li>
             <li><b>擠壓伸展</b>：史萊姆落地壓扁、彈起拉長，是動畫的經典原則。</li>
-            <li><b>粒子特效</b>：魔法、金幣、劍光、營火火星，使用物件池重複利用。</li>
-            <li><b>動態光源</b>：營火與魔法寶珠是點光源，夜晚會照亮周圍；太陽產生即時陰影。</li>
-            <li><b>日夜切換</b>：燈光顏色、強度、霧、天空同步漸變，夜晚出現螢火蟲。</li>
-            <li><b>HTML 疊加</b>：名牌與對話框用 <code>CSS2DRenderer</code> 跟著 3D 角色移動。</li>
+            <li><b>粒子特效</b>：魔法、金幣、劍光、星星，使用物件池重複利用。</li>
+            <li><b>動態光源與陰影</b>：每個舞台有自己的燈光與即時陰影；夜晚模式下魔法寶珠的點光源會照亮周圍。</li>
           </ul>
           <p>想要更精緻的角色，可以用 Blender／Spline 製作模型（.glb）搭配骨骼動畫載入。</p>
         </div>
