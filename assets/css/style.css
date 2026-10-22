@@ -159,8 +159,12 @@ button {
   aspect-ratio: 1 / 1;
   border-bottom: 2px solid var(--line);
   border-radius: 10px 10px 0 0;
-  background: var(--sky);
+  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.55), transparent 55%), linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 100%);
   cursor: pointer;
+}
+
+body.night .view {
+  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), transparent 55%), var(--sky);
 }
 
 .status {

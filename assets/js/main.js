@@ -10,7 +10,7 @@ const state = { dance: false, night: false, nightK: 0 };
 
 // ---------- 卡片 ----------
 $("#grid").innerHTML = CHARACTERS.map(
-  (c, i) => `<article class="card" data-i="${i}" style="--c:${c.color}">
+  (c, i) => `<article class="card" data-i="${i}" style="--c:${c.color};--sky-a:${c.sky?.[0] ?? "#8fc6e0"};--sky-b:${c.sky?.[1] ?? "#dcf0f6"}">
     <div class="view" title="點一下讓 ${c.name} 說話">
       <span class="status" id="status-${i}"></span>
       <div class="bubble" id="bubble-${i}"></div>

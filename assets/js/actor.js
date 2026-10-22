@@ -24,7 +24,7 @@ export class Actor {
     this.blinking = false;
     this.action = null;
     this.dancing = false;
-    this.specialDur = def.id === "wizard" ? 2.6 : 1.6;
+    this.specialDur = def.specialDur ?? 1.6;
     this.hoverY = 0.75; // 會飛的角色在格子裡的飛行高度
   }
 

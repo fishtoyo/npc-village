@@ -20,7 +20,7 @@ export class Particles {
   }
 
   // 從 pos 噴出 count 顆粒子
-  emit(pos, { count = 12, color = 0xffe27a, colors, speed = 1.5, up = 1.5, life = 0.9, gravity = 2, shape = "spark", size = 1, spread = 0.1 } = {}) {
+  emit(pos, { count = 12, color = 0xffe27a, colors, speed = 1.5, up = 1.5, life = 0.9, gravity = 2, shape = "spark", size = 1, spread = 0.1, dir = null } = {}) {
     for (let i = 0; i < count; i++) {
       const p = this.pool[this.cursor];
       this.cursor = (this.cursor + 1) % this.pool.length;
@@ -30,6 +30,7 @@ export class Particles {
       const a = Math.random() * Math.PI * 2;
       const r = Math.random() * speed;
       p.vel.set(Math.cos(a) * r, up * (0.5 + Math.random() * 0.8), Math.sin(a) * r);
+      if (dir) p.vel.add(dir); // 有方向的噴射（例如噴火）
       p.life = p.max = life * (0.7 + Math.random() * 0.6);
       p.gravity = gravity;
       p.spin = (Math.random() - 0.5) * 12;
