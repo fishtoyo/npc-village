@@ -159,11 +159,16 @@ button {
   aspect-ratio: 1 / 1;
   border-bottom: 2px solid var(--line);
   border-radius: 10px 10px 0 0;
-  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.55), transparent 55%), linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 100%);
+  background: radial-gradient(circle at 50% 35%, #fbf5ec 0%, #efe4d5 60%, #e6d8c5 100%);
   cursor: pointer;
 }
 
-body.night .view {
+/* 參考設計圖：米色與藍灰色兩種背景 */
+.card[data-bg="blue"] .view {
+  background: radial-gradient(circle at 50% 35%, #eef2f7 0%, #d9e1eb 60%, #cbd5e2 100%);
+}
+
+body.night .card .view {
   background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), transparent 55%), var(--sky);
 }
 

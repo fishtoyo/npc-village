@@ -1,5 +1,6 @@
 // 格狀展示：一個 WebGL 畫布固定在畫面上，用 scissor 把每個小舞台畫進對應卡片的位置
 import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { CHARACTERS } from "./characters.js";
 import { Actor } from "./actor.js";
 import { buildStage } from "./stage.js";
@@ -10,7 +11,7 @@ const state = { dance: false, night: false, nightK: 0 };
 
 // ---------- 卡片 ----------
 $("#grid").innerHTML = CHARACTERS.map(
-  (c, i) => `<article class="card" data-i="${i}" style="--c:${c.color};--sky-a:${c.sky?.[0] ?? "#8fc6e0"};--sky-b:${c.sky?.[1] ?? "#dcf0f6"}">
+  (c, i) => `<article class="card" data-i="${i}" data-bg="${c.bg ?? "beige"}" style="--c:${c.color}">
     <div class="view" title="點一下讓 ${c.name} 說話">
       <span class="status" id="status-${i}"></span>
       <div class="bubble" id="bubble-${i}"></div>
@@ -38,13 +39,17 @@ renderer.setClearColor(0x000000, 0);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping; // 保留原本的粉嫩配色
+// 共用的攝影棚環境貼圖（給金屬、亮面材質反射用）
+const envMap = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 
 const cards = [...document.querySelectorAll(".card")].map((el, i) => {
   const def = CHARACTERS[i];
-  const stage = buildStage(def.id);
+  const stage = buildStage(def, envMap);
   const particles = new Particles(stage.scene, 60);
   const actor = new Actor(def, particles);
   stage.scene.add(actor.root);
+  stage.fit(actor.root);
   return { el, view: el.querySelector(".view"), bubble: el.querySelector(".bubble"), status: el.querySelector(".status"), def, stage, particles, actor, line: 0 };
 });
 
