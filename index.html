@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>NPC 小村 NPC VILLAGE</title>
-    <meta name="description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：勇者、魔法師、弓箭手、商人、史萊姆、小精靈，每個角色在自己的格子裡發呆、踏步、眨眼、做特殊動作。" />
+    <meta name="description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：戰士、巫師、女巫、弓箭手、王子、公主、噴火龍，每個角色在自己的格子裡發呆、踏步、眨眼、做特殊動作。" />
     <meta name="theme-color" content="#3d6d8c" />
     <link rel="canonical" href="https://fishtoyo.github.io/npc-village/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="NPC 小村 NPC VILLAGE" />
-    <meta property="og:description" content="用 Three.js 繪製的 Q 版 NPC 角色展示：每個角色在自己的格子裡踏步、眨眼、施法、跳舞，還會說英文單字。" />
+    <meta property="og:description" content="用 Three.js 繪製的軟膠公仔風 Q 版角色：戰士、巫師、弓箭手、王子、公主、噴火龍，會眨眼、施法、跳舞，還會說英文單字。" />
     <meta property="og:url" content="https://fishtoyo.github.io/npc-village/" />
     <meta property="og:image" content="https://fishtoyo.github.io/npc-village/assets/og.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -58,13 +58,14 @@
           <p>所有角色都是用程式即時組出來的（球、膠囊、圓錐、圓柱），沒有載入任何 3D 模型檔或圖片。</p>
           <ul>
             <li><b>一個畫布、多個舞台</b>：整頁只有一個 WebGL 畫布，用 scissor 把 6 個小場景分別畫進每張卡片的位置；捲到畫面外的卡片不會繪製。</li>
-            <li><b>卡通著色（Toon Shading）</b>：<code>MeshToonMaterial</code> 搭配三階漸層貼圖，光影呈現色塊感。</li>
-            <li><b>描邊</b>：每個零件複製一份放大、只畫背面的網格（inverted hull），做出卡通黑邊。</li>
+            <li><b>公仔質感</b>：<code>MeshPhysicalMaterial</code> 加亮面塗層（clearcoat），光影柔和，像軟膠公仔。</li>
+            <li><b>環境反射</b>：<code>RoomEnvironment</code> 產生攝影棚環境貼圖，頭盔、皇冠、劍等金屬部位會有真實反光。</li>
+            <li><b>造型手法</b>：旋轉體（Lathe）做裙子與長袍、擠出（Extrude）做星星、彎曲圓錐做牛角與帽尖、曲線管做木杖。</li>
             <li><b>Q 版骨架</b>：身體、頭、手、腳各有關節，用程式計算旋轉角度做踏步、揮手、跳舞。</li>
             <li><b>角色行為</b>：發呆 → 原地踏步（順便轉一圈展示側面與背面）→ 偶爾做特殊動作，還會眨眼、東張西望。</li>
-            <li><b>擠壓伸展</b>：史萊姆落地壓扁、彈起拉長，是動畫的經典原則。</li>
-            <li><b>粒子特效</b>：魔法、金幣、劍光、星星，使用物件池重複利用。</li>
-            <li><b>動態光源與陰影</b>：每個舞台有自己的燈光與即時陰影；夜晚模式下魔法寶珠的點光源會照亮周圍。</li>
+            <li><b>表情</b>：眨眼、說話時嘴巴開合、跳舞時笑瞇眼、特殊動作時皺眉。</li>
+            <li><b>粒子特效</b>：魔法、劍光、火焰、星星，使用物件池重複利用。</li>
+            <li><b>動態光源與陰影</b>：每個舞台有自己的燈光與即時陰影；夜晚模式下巫師木杖的點光源會照亮周圍。</li>
           </ul>
           <p>想要更精緻的角色，可以用 Blender／Spline 製作模型（.glb）搭配骨骼動畫載入。</p>
         </div>
